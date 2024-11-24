@@ -14,7 +14,7 @@ ENV PATH=$PATH:$NODE_HOME/bin
 
 WORKDIR /ws/code
 
-COPY src /ws/code
+COPY src /ws/code/src
 COPY package.json /ws/code
 COPY package-lock.json /ws/code
 
@@ -22,4 +22,4 @@ RUN npm i
 
 EXPOSE 80
 
-ENTRYPOINT ["node", "/ws/code/src/index.js"]
+ENTRYPOINT ["npm", "start"]
