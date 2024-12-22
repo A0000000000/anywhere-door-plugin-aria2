@@ -133,7 +133,7 @@ function processCommand(source, rawCmd) {
                         const numWaiting = resp.data.result['numWaiting']
                         const numStopped = resp.data.result['numStopped']
                         const numStoppedTotal = resp.data.result['numStoppedTotal']
-                        data = `Aria2 全局信息\n总体下载速度: ${downloadSpeed}B/s\n总体上传速度: ${uploadSpeed}B/s\n活动下载数量: ${numActive}\n等待下载数量: ${numWaiting}\n停止下载数量: ${numStopped}\n已停止下载数量: ${numStoppedTotal}`
+                        data = `Aria2 全局信息\n总体下载速度: ${downloadSpeed} B/s\n总体上传速度: ${uploadSpeed} B/s\n活动下载数量: ${numActive}\n等待下载数量: ${numWaiting}\n停止下载数量: ${numStopped}\n已停止下载数量: ${numStoppedTotal}`
                         break
                     case 'addUri':
                         data = `Aria2 下载任务创建成功!\n任务id: ${resp.data['result']}`
@@ -146,18 +146,18 @@ function processCommand(source, rawCmd) {
                         const status = resp.data.result['status']
                         const totalLength = resp.data.result['totalLength']
                         const completedLength = resp.data.result['completedLength']
-                        data = `任务信息\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength}B\n已下载的长度: ${completedLength}B`
+                        data = `任务信息\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength} B\n已下载的长度: ${completedLength} B`
                         break
                     case 'tellActive':
                         const items = resp.data.result
-                        data = 'Active 任务列表'
+                        data = 'Active 任务列表\n'
                         for (let i = 0; i < items.length; i++) {
                             const item = items[i]
                             const gid = item['gid']
                             const status = item['status']
                             const totalLength = item['totalLength']
                             const completedLength = item['completedLength']
-                            data = data + `\n第${i}项任务\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength}B\n已下载的长度: ${completedLength}B`
+                            data = data + `\n第${i+1}项任务\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength} B\n已下载的长度: ${completedLength} B`
                             if (i !== items.length - 1) {
                                 data = data + '\n'
                             }
