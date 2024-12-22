@@ -113,6 +113,10 @@ function processCommand(source, rawCmd) {
                     body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds[1]]
                 }
                 break
+            case 'tellActive':
+                body[cmdConstant.METHOD] = 'aria2.tellActive'
+                body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`]
+                break
             default:
                 sendRequest(source, cmdConstant.RESULT_NO_SUCH_CMD)
                 return
@@ -123,26 +127,41 @@ function processCommand(source, rawCmd) {
                 let data = cmdConstant.RESULT_NO_SUCH_CMD
                 switch (method) {
                     case 'getGlobalStat':
-                        const downloadSpeed = resp.data['downloadSpeed']
-                        const uploadSpeed = resp.data['uploadSpeed']
-                        const numActive = resp.data['numActive']
-                        const numWaiting = resp.data['numWaiting']
-                        const numStopped = resp.data['numStopped']
-                        const numStoppedTotal = resp.data['numStoppedTotal']
+                        const downloadSpeed = resp.data.result['downloadSpeed']
+                        const uploadSpeed = resp.data.result['uploadSpeed']
+                        const numActive = resp.data.result['numActive']
+                        const numWaiting = resp.data.result['numWaiting']
+                        const numStopped = resp.data.result['numStopped']
+                        const numStoppedTotal = resp.data.result['numStoppedTotal']
                         data = `Aria2 全局信息\n总体下载速度: ${downloadSpeed}B/s\n总体上传速度: ${uploadSpeed}B/s\n活动下载数量: ${numActive}\n等待下载数量: ${numWaiting}\n停止下载数量: ${numStopped}\n已停止下载数量: ${numStoppedTotal}`
                         break
                     case 'addUri':
-                        data = `Aria2 下载任务创建成功!\n任务id: ${resp.data['result']}`
+                        data = `Aria2 下载任务创建成功!\n任务id: ${resp.data.result['result']}`
                         break
                     case 'remove':
-                        data = `Aria2 移除下载任务成功!\n任务id: ${resp.data['result']}`
+                        data = `Aria2 移除下载任务成功!\n任务id: ${resp.data.result['result']}`
                         break
                     case 'tellStatus':
-                        const gid = resp.data['gid']
-                        const status = resp.data['status']
-                        const totalLength = resp.data['totalLength']
-                        const completedLength = resp.data['completedLength']
+                        const gid = resp.data.result['gid']
+                        const status = resp.data.result['status']
+                        const totalLength = resp.data.result['totalLength']
+                        const completedLength = resp.data.result['completedLength']
                         data = `任务信息\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength}B\n已下载的长度: ${completedLength}B`
+                        break
+                    case 'tellActive':
+                        const items = resp.data.result
+                        data = 'Active 任务列表'
+                        for (let i = 0; i < items.length; i++) {
+                            const item = items[i]
+                            const gid = item['gid']
+                            const status = item['status']
+                            const totalLength = item['totalLength']
+                            const completedLength = item['completedLength']
+                            data = data + `\n第${i}项任务\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength}B\n已下载的长度: ${completedLength}B`
+                            if (i !== items.length - 1) {
+                                data = data + '\n'
+                            }
+                        }
                         break
                     default:
                         data = cmdConstant.RESULT_NO_SUCH_CMD
