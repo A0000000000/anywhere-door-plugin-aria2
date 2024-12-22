@@ -82,16 +82,37 @@ function processCommand(source, rawCmd) {
         body[cmdConstant.JSON_RPC] = cmdConstant.JSON_RPC_VERSION
         body[cmdConstant.ID] = pluginName
         switch (method) {
-            case 'addUri':
-                body[cmdConstant.METHOD] = 'aria2.addUri'
-                body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds.slice(1)]
-                break
             case 'getGlobalStat':
                 body[cmdConstant.METHOD] = 'aria2.getGlobalStat'
                 body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`]
                 break
-            // Todo: 完善其他命令
-
+            case 'addUri':
+                if (cmds.length < 2) {
+                    sendRequest(source, cmdConstant.RESULT_CMD_PARAMS_ERROR)
+                    return
+                } else {
+                    body[cmdConstant.METHOD] = 'aria2.addUri'
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, [cmds[1]]]
+                }
+                break
+            case 'remove':
+                if (cmds.length < 2) {
+                    sendRequest(source, cmdConstant.RESULT_CMD_PARAMS_ERROR)
+                    return
+                } else {
+                    body[cmdConstant.METHOD] = 'aria2.remove'
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds[1]]
+                }
+                break
+            case 'tellStatus':
+                if (cmds.length < 2) {
+                    sendRequest(source, cmdConstant.RESULT_CMD_PARAMS_ERROR)
+                    return
+                } else {
+                    body[cmdConstant.METHOD] = 'aria2.tellStatus'
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds[1]]
+                }
+                break
             default:
                 sendRequest(source, cmdConstant.RESULT_NO_SUCH_CMD)
                 return
@@ -99,8 +120,35 @@ function processCommand(source, rawCmd) {
         axios.post(aria2Rpc, body)
             .then(resp => {
                 console.log(resp.data)
-                // Todo: 优化输出格式
-                sendRequest(source, JSON.stringify(resp.data))
+                let data = cmdConstant.RESULT_NO_SUCH_CMD
+                switch (method) {
+                    case 'getGlobalStat':
+                        const downloadSpeed = resp.data['downloadSpeed']
+                        const uploadSpeed = resp.data['uploadSpeed']
+                        const numActive = resp.data['numActive']
+                        const numWaiting = resp.data['numWaiting']
+                        const numStopped = resp.data['numStopped']
+                        const numStoppedTotal = resp.data['numStoppedTotal']
+                        data = `Aria2 全局信息\n总体下载速度: ${downloadSpeed}B/s\n总体上传速度: ${uploadSpeed}B/s\n活动下载数量: ${numActive}\n等待下载数量: ${numWaiting}\n停止下载数量: ${numStopped}\n已停止下载数量: ${numStoppedTotal}`
+                        break
+                    case 'addUri':
+                        data = `Aria2 下载任务创建成功!\n任务id: ${resp.data['result']}`
+                        break
+                    case 'remove':
+                        data = `Aria2 移除下载任务成功!\n任务id: ${resp.data['result']}`
+                        break
+                    case 'tellStatus':
+                        const gid = resp.data['gid']
+                        const status = resp.data['status']
+                        const totalLength = resp.data['totalLength']
+                        const completedLength = resp.data['completedLength']
+                        data = `任务信息\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength}B\n已下载的长度: ${completedLength}B`
+                        break
+                    default:
+                        data = cmdConstant.RESULT_NO_SUCH_CMD
+                        break
+                }
+                sendRequest(source, data)
         }).catch(err => {
             console.log(err)
             sendRequest(source, err.toString())
