@@ -117,6 +117,27 @@ function processCommand(source, rawCmd) {
                 body[cmdConstant.METHOD] = 'aria2.tellActive'
                 body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`]
                 break
+            case 'tellWaiting':
+                body[cmdConstant.METHOD] = 'aria2.tellWaiting'
+                body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, -1]
+                break
+            case 'tellStopped':
+                body[cmdConstant.METHOD] = 'aria2.tellStopped'
+                body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, -1]
+                break
+            case 'purgeDownloadResult':
+                body[cmdConstant.METHOD] = 'aria2.purgeDownloadResult'
+                body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`]
+                break
+            case 'removeDownloadResult':
+                if (cmds.length < 2) {
+                    sendRequest(source, cmdConstant.RESULT_CMD_PARAMS_ERROR)
+                    return
+                } else {
+                    body[cmdConstant.METHOD] = 'aria2.removeDownloadResult'
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds[1]]
+                }
+                break
             default:
                 sendRequest(source, cmdConstant.RESULT_NO_SUCH_CMD)
                 return
@@ -149,19 +170,52 @@ function processCommand(source, rawCmd) {
                         data = `任务信息\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength} B\n已下载的长度: ${completedLength} B`
                         break
                     case 'tellActive':
-                        const items = resp.data.result
                         data = 'Active 任务列表\n'
-                        for (let i = 0; i < items.length; i++) {
-                            const item = items[i]
+                        for (let i = 0; i < resp.data.result.length; i++) {
+                            const item = resp.data.result[i]
                             const gid = item['gid']
                             const status = item['status']
                             const totalLength = item['totalLength']
                             const completedLength = item['completedLength']
                             data = data + `\n第${i+1}项任务\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength} B\n已下载的长度: ${completedLength} B`
-                            if (i !== items.length - 1) {
+                            if (i !== resp.data.result.length - 1) {
                                 data = data + '\n'
                             }
                         }
+                        break
+                    case 'tellWaiting':
+                        data = 'Waiting 任务列表\n'
+                        for (let i = 0; i < resp.data.result.length; i++) {
+                            const item = resp.data.result[i]
+                            const gid = item['gid']
+                            const status = item['status']
+                            const totalLength = item['totalLength']
+                            const completedLength = item['completedLength']
+                            data = data + `\n第${i+1}项任务\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength} B\n已下载的长度: ${completedLength} B`
+                            if (i !== resp.data.result.length - 1) {
+                                data = data + '\n'
+                            }
+                        }
+                        break
+                    case 'tellStopped':
+                        data = 'Stopped 任务列表\n'
+                        for (let i = 0; i < resp.data.result.length; i++) {
+                            const item = resp.data.result[i]
+                            const gid = item['gid']
+                            const status = item['status']
+                            const totalLength = item['totalLength']
+                            const completedLength = item['completedLength']
+                            data = data + `\n第${i+1}项任务\n任务id: ${gid}\n任务状态: ${status}\n下载的总长度: ${totalLength} B\n已下载的长度: ${completedLength} B`
+                            if (i !== resp.data.result.length - 1) {
+                                data = data + '\n'
+                            }
+                        }
+                        break
+                    case 'purgeDownloadResult':
+                        data = resp.data.result
+                        break
+                    case 'removeDownloadResult':
+                        data = resp.data.result
                         break
                     default:
                         data = cmdConstant.RESULT_NO_SUCH_CMD
