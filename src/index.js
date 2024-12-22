@@ -119,11 +119,19 @@ function processCommand(source, rawCmd) {
                 break
             case 'tellWaiting':
                 body[cmdConstant.METHOD] = 'aria2.tellWaiting'
-                body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, -1]
+                if (cmds.length < 2) {
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, 10]
+                } else {
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, Number(cmds[1])]
+                }
                 break
             case 'tellStopped':
                 body[cmdConstant.METHOD] = 'aria2.tellStopped'
-                body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, -1]
+                if (cmds.length < 2) {
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, 10]
+                } else {
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, 0, Number(cmds[1])]
+                }
                 break
             case 'purgeDownloadResult':
                 body[cmdConstant.METHOD] = 'aria2.purgeDownloadResult'
