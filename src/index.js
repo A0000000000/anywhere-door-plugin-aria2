@@ -136,10 +136,10 @@ function processCommand(source, rawCmd) {
                         data = `Aria2 全局信息\n总体下载速度: ${downloadSpeed}B/s\n总体上传速度: ${uploadSpeed}B/s\n活动下载数量: ${numActive}\n等待下载数量: ${numWaiting}\n停止下载数量: ${numStopped}\n已停止下载数量: ${numStoppedTotal}`
                         break
                     case 'addUri':
-                        data = `Aria2 下载任务创建成功!\n任务id: ${resp.data.result['result']}`
+                        data = `Aria2 下载任务创建成功!\n任务id: ${resp.data['result']}`
                         break
                     case 'remove':
-                        data = `Aria2 移除下载任务成功!\n任务id: ${resp.data.result['result']}`
+                        data = `Aria2 移除下载任务成功!\n任务id: ${resp.data['result']}`
                         break
                     case 'tellStatus':
                         const gid = resp.data.result['gid']
