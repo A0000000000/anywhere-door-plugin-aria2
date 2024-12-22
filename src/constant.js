@@ -25,7 +25,7 @@ const ERROR_MESSAGE_TOKEN_INVALID = 'token not valid'
 
 const REQUEST_URL = (host, port, prefix) =>  `http://${host}:${port}${prefix}/plugin`
 
-module.exports = {
+export default {
     DEFAULT_HOST,
     DEFAULT_PORT,
     DEFAULT_PREFIX,

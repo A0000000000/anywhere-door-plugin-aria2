@@ -7,7 +7,7 @@ const TOKEN = 'token'
 const RESULT_PARAMS_ERROR = 'params error.'
 const RESULT_NO_SUCH_CMD = 'no such cmd.'
 
-module.exports = {
+export default {
     JSON_RPC,
     JSON_RPC_VERSION,
     ID,
