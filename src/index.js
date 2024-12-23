@@ -109,6 +109,24 @@ function processCommand(source, rawCmd) {
                     body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds[1]]
                 }
                 break
+            case 'pause':
+                if (cmds.length < 2) {
+                    sendRequest(source, cmdConstant.RESULT_CMD_PARAMS_ERROR)
+                    return
+                } else {
+                    body[cmdConstant.METHOD] = 'aria2.pause'
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds[1]]
+                }
+                break
+            case 'unpause':
+                if (cmds.length < 2) {
+                    sendRequest(source, cmdConstant.RESULT_CMD_PARAMS_ERROR)
+                    return
+                } else {
+                    body[cmdConstant.METHOD] = 'aria2.unpause'
+                    body[cmdConstant.PARAMS] = [`${cmdConstant.TOKEN}:${aria2Token}`, cmds[1]]
+                }
+                break
             case 'tellStatus':
                 if (cmds.length < 2) {
                     sendRequest(source, cmdConstant.RESULT_CMD_PARAMS_ERROR)
@@ -174,6 +192,12 @@ function processCommand(source, rawCmd) {
                         break
                     case 'remove':
                         data = `Aria2 移除下载任务成功!\n任务id: ${resp.data['result']}`
+                        break
+                    case 'pause':
+                        data = `Aria2 暂停下载任务成功!\n任务id: ${resp.data['result']}`
+                        break
+                    case 'unpause':
+                        data = `Aria2 取消暂停任务成功!\n任务id: ${resp.data['result']}`
                         break
                     case 'tellStatus':
                         const gid = resp.data.result['gid']
