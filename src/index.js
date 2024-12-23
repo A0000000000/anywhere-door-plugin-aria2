@@ -79,7 +79,7 @@ function processCommand(source, rawCmd) {
     if (cmds.length >= 1) {
         const method = cmds[0]
         if (method === 'help') {
-            const help = `Aria2 指令帮助\n1. getGlobalStat: 获取Aria2全局状态\n2. addUri url: 根据指定下载地址, 添加一条下载任务\n3. remove guid: 移除指定id的下载任务\n4. tellStatus guid: 获取某个id对应的任务详情\n5. tellActive: 获取活跃任务列表信息\n6. tellWaiting [count]: 获取指定数量的暂停任务详情, 默认为10\n7. tellStopped [count]: 获取指定数量的停止任务详情, 默认为10\n8. purgeDownloadResult: 清理已停止任务\n9. removeDownloadResult guid: 清理指定已停止任务`
+            const help = `Aria2 指令帮助\n1. getGlobalStat: 获取Aria2全局状态\n2. addUri url: 根据指定下载地址, 添加一条下载任务\n3. remove guid: 移除指定id的下载任务\n4. pause guid: 暂停指定id的下载任务\n5. unpause guid: 取消暂停指定id的下载任务\n6. tellStatus guid: 获取某个id对应的任务详情\n7. tellActive: 获取活跃任务列表信息\n8. tellWaiting [count]: 获取指定数量的暂停任务详情, 默认为10\n9. tellStopped [count]: 获取指定数量的停止任务详情, 默认为10\n10. purgeDownloadResult: 清理已停止任务\n11. removeDownloadResult guid: 清理指定已停止任务`
             sendRequest(source, help)
             return
         }
