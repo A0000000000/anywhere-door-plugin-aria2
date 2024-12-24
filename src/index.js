@@ -42,7 +42,6 @@ if (aria2Token == null) {
     aria2Token = constant.DEFAULT_ARIA2_TOKEN
 }
 
-
 router.post(constant.PLUGIN_URL, ctx => {
     let _token = ctx.request.headers.token
     ctx.req.on(constant.EVENT_DATA, data => {
