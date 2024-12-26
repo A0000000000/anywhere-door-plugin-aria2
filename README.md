@@ -79,4 +79,5 @@ spec:
 ```
 
 ## 使用方法
-1. 无需任何操作, 保证容器正常运行即可
+1. 保证容器正常运行即可
+2. 注册plugin: POST AnywhereDoorManager/plugin/create & Header: token: token & Body: { "plugin_name": "name", "plugin_describe": "desc", "plugin_host": "anywhere-door-plugin-aria2-service.anywhere-door", "plugin_port": 80, "plugin_token": "token" }
