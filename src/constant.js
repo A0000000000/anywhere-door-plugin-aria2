@@ -1,11 +1,11 @@
-const DEFAULT_HOST = '192.168.25.7'
-const DEFAULT_PORT = '8081'
+const DEFAULT_HOST = 'default ip'
+const DEFAULT_PORT = 'default port'
 const DEFAULT_PREFIX = ''
-const DEFAULT_USERNAME = 'maoyanluo'
-const DEFAULT_TOKEN = '1998'
-const DEFAULT_PLUGIN_NAME = 'aria2'
-const DEFAULT_ARIA2_RPC = 'http://192.168.25.5:8080/aria2-rpc/jsonrpc'
-const DEFAULT_ARIA2_TOKEN = '09251205'
+const DEFAULT_USERNAME = 'default user'
+const DEFAULT_TOKEN = 'default token'
+const DEFAULT_PLUGIN_NAME = 'default plugin'
+const DEFAULT_ARIA2_RPC = 'default rpc'
+const DEFAULT_ARIA2_TOKEN = 'default token'
 
 const PLUGIN_URL = '/plugin'
 
