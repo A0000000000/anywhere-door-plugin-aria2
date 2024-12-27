@@ -30,6 +30,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: anywhere-door-plugin-aria2-deployment
+  namespace: anywhere-door
 spec:
   replicas: 1
   selector:
@@ -67,6 +68,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: anywhere-door-plugin-aria2-service
+  namespace: anywhere-door
   labels:
     app: anywhere-door-plugin-aria2
 spec:
