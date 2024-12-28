@@ -4,74 +4,15 @@ import Router from 'koa-router'
 import constant from './constant.js'
 import cmdConstant from './cmd_constant.js'
 
-const app = new Koa();
-const router = new Router();
+const host = process.env.HOST || constant.DEFAULT_HOST
+const port = process.env.PORT ||  constant.DEFAULT_PORT
+const prefix = process.env.PREFIX || constant.DEFAULT_PREFIX
+const username = process.env.USERNAME || constant.DEFAULT_USERNAME
+const token = process.env.TOKEN || constant.DEFAULT_TOKEN
+const pluginName = process.env.PLUGIN_NAME || constant.DEFAULT_PLUGIN_NAME
 
-let host = process.env.HOST
-let port = process.env.PORT
-let prefix = process.env.PREFIX
-let username = process.env.USERNAME
-let token = process.env.TOKEN
-let pluginName = process.env.PLUGIN_NAME
-
-let aria2Rpc = process.env.ARIA2_RPC
-let aria2Token = process.env.ARIA2_TOKEN
-
-if (host == null) {
-    host = constant.DEFAULT_HOST
-}
-if (port == null) {
-    port = constant.DEFAULT_PORT
-}
-if (prefix == null) {
-    prefix = constant.DEFAULT_PREFIX
-}
-if (username == null) {
-    username = constant.DEFAULT_USERNAME
-}
-if (token == null) {
-    token = constant.DEFAULT_TOKEN
-}
-if (pluginName == null) {
-    pluginName = constant.DEFAULT_PLUGIN_NAME
-}
-if (aria2Rpc == null) {
-    aria2Rpc = constant.DEFAULT_ARIA2_RPC
-}
-if (aria2Token == null) {
-    aria2Token = constant.DEFAULT_ARIA2_TOKEN
-}
-
-router.post(constant.PLUGIN_URL, ctx => {
-    let _token = ctx.request.headers.token
-    ctx.req.on(constant.EVENT_DATA, data => {
-        let params = JSON.parse(data)
-        let name = params[constant.PARAMS_NAME]
-        let target = params[constant.PARAMS_TARGET]
-        let raw = params[constant.PARAMS_DATA]
-
-        if (target !== pluginName) {
-            return ctx.response.body = JSON.stringify({
-                code: constant.ERROR_CODE_NOT_THIS_PLUGIN,
-                message: constant.ERROR_MESSAGE_NOT_THS_PLUGIN
-            })
-        }
-
-        if (_token !== token) {
-            return ctx.response.body = JSON.stringify({
-                code: constant.ERROR_CODE_TOKEN_INVALID,
-                message: constant.ERROR_MESSAGE_TOKEN_INVALID
-            })
-        }
-
-        processCommand(name, raw)
-
-        ctx.response.body = JSON.stringify({
-            code: constant.ERROR_CODE_SUCCESS,
-            message: constant.ERROR_MESSAGE_SUCCESS
-        })
-    })
-})
+const aria2Rpc = process.env.ARIA2_RPC || constant.DEFAULT_ARIA2_RPC
+const aria2Token = process.env.ARIA2_TOKEN || constant.DEFAULT_ARIA2_TOKEN
 
 function processCommand(source, rawCmd) {
     const cmds = rawCmd.split(' ')
@@ -285,6 +226,37 @@ function sendRequest(target, data) {
     })
 }
 
-app.use(router.routes()).use(router.allowedMethods())
+function main() {
+    const app = new Koa()
+    const router = new Router()
+    router.post(constant.PLUGIN_URL, ctx => {
+        let _token = ctx.request.headers.token
+        ctx.req.on(constant.EVENT_DATA, data => {
+            let params = JSON.parse(data)
+            let name = params[constant.PARAMS_NAME]
+            let target = params[constant.PARAMS_TARGET]
+            let raw = params[constant.PARAMS_DATA]
+            if (target !== pluginName) {
+                return ctx.response.body = JSON.stringify({
+                    code: constant.ERROR_CODE_NOT_THIS_PLUGIN,
+                    message: constant.ERROR_MESSAGE_NOT_THS_PLUGIN
+                })
+            }
+            if (_token !== token) {
+                return ctx.response.body = JSON.stringify({
+                    code: constant.ERROR_CODE_TOKEN_INVALID,
+                    message: constant.ERROR_MESSAGE_TOKEN_INVALID
+                })
+            }
+            processCommand(name, raw)
+            ctx.response.body = JSON.stringify({
+                code: constant.ERROR_CODE_SUCCESS,
+                message: constant.ERROR_MESSAGE_SUCCESS
+            })
+        })
+    })
+    app.use(router.routes()).use(router.allowedMethods())
+    app.listen(80)
+}
 
-app.listen(80)
+main()
