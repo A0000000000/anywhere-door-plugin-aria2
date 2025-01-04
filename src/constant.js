@@ -1,11 +1,13 @@
 const PLUGIN_URL = '/plugin'
-const CONFIG_URL = '/plugin/config'
+const PLUGIN_CONFIG_URL = '/plugin/config'
 
 const EVENT_DATA = 'data'
 
 const PARAMS_NAME = 'name'
 const PARAMS_TARGET = 'target'
 const PARAMS_DATA = 'data'
+
+const PLUGIN_NAME = 'plugin_name'
 
 const ERROR_CODE_SUCCESS = 0
 const ERROR_CODE_NOT_THIS_PLUGIN = -1
@@ -19,10 +21,12 @@ const CONTROL_PLANE_BASE_REQUEST_URL = (host, port, prefix) =>  `http://${host}:
 
 export default {
     PLUGIN_URL,
+    PLUGIN_CONFIG_URL,
     EVENT_DATA,
     PARAMS_NAME,
     PARAMS_TARGET,
     PARAMS_DATA,
+    PLUGIN_NAME,
     ERROR_CODE_SUCCESS,
     ERROR_CODE_NOT_THIS_PLUGIN,
     ERROR_CODE_TOKEN_INVALID,

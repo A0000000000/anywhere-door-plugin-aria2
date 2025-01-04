@@ -22,7 +22,7 @@ async function processCommand(axiosControlPlane, raw, extend) {
         }
         const body = {}
         body[cmdConstant.JSON_RPC] = cmdConstant.JSON_RPC_VERSION
-        body[cmdConstant.ID] = extend[cmdConstant.ID]
+        body[cmdConstant.ID] = extend[constant.PLUGIN_NAME]
         switch (method) {
             case 'getGlobalStat':
                 body[cmdConstant.METHOD] = 'aria2.getGlobalStat'
@@ -240,7 +240,7 @@ function main() {
             }
             const extend = {}
             extend[cmdConstant.JSON_RPC] = aria2Rpc
-            extend[cmdConstant.ID] = pluginName
+            extend[constant.PLUGIN_NAME] = pluginName
             extend[cmdConstant.TOKEN] = aria2Token
             processCommand(axiosControlPlane, raw, extend).then(data => {
                 sendRequest(axiosControlPlane, pluginName, name, data).then(res => {
@@ -250,6 +250,11 @@ function main() {
                 })
             }).catch(err => {
                 console.log(err)
+                sendRequest(axiosControlPlane, pluginName, name, err.message).then(res => {
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                })
             })
             ctx.response.body = JSON.stringify({
                 code: constant.ERROR_CODE_SUCCESS,
