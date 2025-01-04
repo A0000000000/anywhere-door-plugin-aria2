@@ -1,0 +1,12 @@
+Aria2 指令帮助
+1. getGlobalStat: 获取Aria2全局状态
+2. addUri url: 根据指定下载地址, 添加一条下载任务
+3. remove guid: 移除指定id的下载任务
+4. pause guid: 暂停指定id的下载任务
+5. unpause guid: 取消暂停指定id的下载任务
+6. tellStatus guid: 获取某个id对应的任务详情
+7. tellActive: 获取活跃任务列表信息
+8. tellWaiting [count]: 获取指定数量的暂停任务详情, 默认为10
+9. tellStopped [count]: 获取指定数量的停止任务详情, 默认为10
+10. purgeDownloadResult: 清理已停止任务
+11. removeDownloadResult guid: 清理指定已停止任务`
