@@ -6,7 +6,7 @@ import cmdConstant from './cmd_constant.js'
 import fs from "fs"
 
 async function processCommand(axiosControlPlane, raw, extend) {
-    const cmds = rawCmd.split(' ')
+    const cmds = raw.split(' ')
     if (cmds.length >= 1) {
         const method = cmds[0]
         if (method === 'help') {
