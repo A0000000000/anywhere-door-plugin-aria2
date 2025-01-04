@@ -243,7 +243,7 @@ function main() {
             extend[cmdConstant.ID] = pluginName
             extend[cmdConstant.TOKEN] = aria2Token
             processCommand(axiosControlPlane, raw, extend).then(data => {
-                sendRequest(axiosControlPlane, pluginName, target, data).then(res => {
+                sendRequest(axiosControlPlane, pluginName, name, data).then(res => {
                     console.log(res)
                 }).catch(err => {
                     console.log(err)
