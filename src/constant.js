@@ -1,13 +1,5 @@
-const DEFAULT_HOST = 'default ip'
-const DEFAULT_PORT = 'default port'
-const DEFAULT_PREFIX = ''
-const DEFAULT_USERNAME = 'default user'
-const DEFAULT_TOKEN = 'default token'
-const DEFAULT_PLUGIN_NAME = 'default plugin'
-const DEFAULT_ARIA2_RPC = 'default rpc'
-const DEFAULT_ARIA2_TOKEN = 'default token'
-
 const PLUGIN_URL = '/plugin'
+const CONFIG_URL = '/plugin/config'
 
 const EVENT_DATA = 'data'
 
@@ -23,17 +15,9 @@ const ERROR_MESSAGE_SUCCESS = 'success'
 const ERROR_MESSAGE_NOT_THS_PLUGIN = 'not this plugin'
 const ERROR_MESSAGE_TOKEN_INVALID = 'token not valid'
 
-const REQUEST_URL = (host, port, prefix) =>  `http://${host}:${port}${prefix}/plugin`
+const CONTROL_PLANE_BASE_REQUEST_URL = (host, port, prefix) =>  `http://${host}:${port}${prefix}`
 
 export default {
-    DEFAULT_HOST,
-    DEFAULT_PORT,
-    DEFAULT_PREFIX,
-    DEFAULT_USERNAME,
-    DEFAULT_TOKEN,
-    DEFAULT_PLUGIN_NAME,
-    DEFAULT_ARIA2_RPC,
-    DEFAULT_ARIA2_TOKEN,
     PLUGIN_URL,
     EVENT_DATA,
     PARAMS_NAME,
@@ -45,5 +29,5 @@ export default {
     ERROR_MESSAGE_SUCCESS,
     ERROR_MESSAGE_NOT_THS_PLUGIN,
     ERROR_MESSAGE_TOKEN_INVALID,
-    REQUEST_URL
+    CONTROL_PLANE_BASE_REQUEST_URL
 }
