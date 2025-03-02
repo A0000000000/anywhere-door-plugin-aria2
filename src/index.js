@@ -58,7 +58,7 @@ function main() {
     const aria2Rpc = process.env.ARIA2_RPC
     const aria2Token = process.env.ARIA2_TOKEN
     const selfHost = process.env.SELF_HOST
-    const selfPort = constant.PORT
+    const selfPort = process.env.SELF_PORT || constant.PORT
     const selfPrefix = process.env.SELF_PREFIX || ''
 
     // 控制平面交互
