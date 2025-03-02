@@ -27,6 +27,22 @@ async function sendRequest(pluginName, target, data, extend) {
     })
 }
 
+function registerPlugin(axiosControlPlane, params) {
+    axiosControlPlane.post(constant.PLUGIN_REGISTER_URL, params).then(resp => {
+        const data = resp.data
+        if (data.code === -10) {
+            // 用户不存在，10s后重试注册
+            setTimeout(() => {
+                registerPlugin(axiosControlPlane, params)
+            }, 10000)
+        } else {
+            console.log(data)
+        }
+    }).catch(error => {
+        console.error(error)
+    })
+}
+
 function main() {
     // 加载环境变量
     const host = process.env.HOST
@@ -37,6 +53,9 @@ function main() {
     const pluginName = process.env.PLUGIN_NAME
     const aria2Rpc = process.env.ARIA2_RPC
     const aria2Token = process.env.ARIA2_TOKEN
+    const selfHost = process.env.SELF_HOST
+    const selfPort = constant.PORT
+    const selfPrefix = process.env.SELF_PREFIX || ''
 
     // 控制平面交互
     const axiosControlPlane = axios.create({
@@ -45,6 +64,14 @@ function main() {
             token, username
         }
     })
+
+    registerPlugin(axiosControlPlane, {
+        name: pluginName,
+        host: selfHost,
+        port: selfPort,
+        prefix: selfPrefix,
+    })
+
     const logCtx = new LogContext(axiosControlPlane, pluginName)
 
     const app = new Koa()
@@ -79,14 +106,14 @@ function main() {
                 sendRequest(pluginName, name, data, extend).then(res => {
                     console.log(res)
                 }).catch(err => {
-                    console.log(err)
+                    console.error(err)
                 })
             }).catch(err => {
-                console.log(err)
+                console.error(err)
                 sendRequest(pluginName, name, err.message, extend).then(res => {
                     console.log(res)
                 }).catch(err => {
-                    console.log(err)
+                    console.error(err)
                 })
             })
             ctx.response.body = JSON.stringify({
@@ -96,7 +123,7 @@ function main() {
         })
     })
     app.use(router.routes()).use(router.allowedMethods())
-    app.listen(80)
+    app.listen(constant.PORT)
 }
 
 main()
